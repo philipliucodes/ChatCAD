@@ -1,5 +1,5 @@
 beautifulsoup4==4.12.2
-clip==1.0 # This did not work, instead when directly to github repo: https://github.com/openai/CLIP, needs CUDA which needs GPUs, asking Dr. Hu
+clip==1.0 # This did not work, instead when directly to github repo: https://github.com/openai/CLIP, needs CUDA which needs GPUs, using Lonestar6
 easydict==1.10
 google==3.0.0
 gradio==3.31.0
@@ -15,7 +15,7 @@ Pillow==9.5.0
 revChatGPT==5.1.3
 scikit_learn==1.2.2
 #scipy==1.9.0
-#scipy would not install, just did conda install scipy
+#scipy would not install, just did "conda install scipy"
 setuptools==59.8.0
 text2vec==1.1.8
 torch==2.0.1
