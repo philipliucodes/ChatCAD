@@ -1,5 +1,5 @@
 beautifulsoup4==4.12.2
-clip==1.0 # This did not work, instead when directly to github repo: https://github.com/openai/CLIP, needs CUDA which needs GPUs, using Lonestar6
+clip==1.0 # This did not work, instead when directly to github repo: https://github.com/openai/CLIP, needs CUDA which needs GPUs, using Lonestar6 from TCAA
 easydict==1.10
 google==3.0.0
 gradio==3.31.0
