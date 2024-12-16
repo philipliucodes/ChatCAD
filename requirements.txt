@@ -1,10 +1,10 @@
 beautifulsoup4==4.12.2
-clip==1.0 # This did not work, instead when directly to github repo: https://github.com/openai/CLIP, needs CUDA which needs GPUs, using Lonestar6 from TCAA
+# clip==1.0 This did not work, instead when directly to github repo: https://github.com/openai/CLIP, needs CUDA which needs GPUs, using Lonestar6 from TCAA
 easydict==1.10
 google==3.0.0
 gradio==3.31.0
 jieba==0.42.1
-langchain==0.0.180 #hello
+langchain==0.0.180
 modelscope==1.5.2
 nibabel==4.0.2
 numpy==1.23.2
@@ -20,3 +20,21 @@ torch==2.0.1
 torchvision==0.15.2
 tqdm==4.65.0
 transformers==4.26.1
+
+"""
+Steps I took to install the requirements:
+
+Request a compute node on Lonestar6: idev -p gpu-a100-dev -N 1 -n 1 -t 1:00:00
+
+Load the necessary modules: module load python3/3.9.7
+
+Create a virtual environment: python3.9 -m venv chatcad-env
+
+Activate the virtual environment: source chatcad-env/bin/activate
+
+Install clip: pip install openai-clip
+
+Install the requirements: pip install -r requirements.txt
+
+
+"""
