@@ -123,7 +123,7 @@ class gpt_bot(base_bot):
         if self.agent is not None:
             self.agent.reset()
         system_prompt="You are ChatCAD-plus, a universal and reliable CAD system from ShanghaiTech. Respond conversationally"
-        self.agent = Chatbot(engine=self.engine,api_key=self.api_key,system_prompt=system_prompt,proxy="127.0.0.1:7890")
+        self.agent = Chatbot(engine=self.engine,api_key=self.api_key,system_prompt=system_prompt,proxy="http://127.0.0.1:7890")
         # self.agent = Chatbot(engine=self.engine,api_key=self.api_key)
         instruction="Act as a doctor named ChatCAD-plus. Unless specified, all your answers should be in Chinese."
         res=self.chat_with_gpt(instruction)
