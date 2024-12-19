@@ -24,7 +24,7 @@ transformers==4.26.1
 """
 Steps I took to install the requirements:
 
-Request a compute node on Lonestar6: idev -p gpu-a100-dev -N 1 -n 1 -t 1:00:00
+Request a compute node on Lonestar6 so you have access to GPUs: idev -p gpu-a100-dev -N 1 -n 1 -t 1:00:00
 
 Load the necessary modules: module load python3/3.9.7
 
@@ -40,8 +40,10 @@ Install gradio-client: pip install gradio-client==0.2.4
 
 Add the weights and annotations from the Github to the ChatCAD repo
 
-Request a compute node with GPUs: idev -p gpu-a100-dev -N 1 -n 1 -t 1:00:00
-
 Install PyTorch: pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124
+
+Install SentencePiece library: pip install sentencepiece
+
+Install sacremoses?: pip install sacremoses
 
 """
