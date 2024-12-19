@@ -10,36 +10,35 @@ from datetime import datetime
 # os.environ["http_proxy"]="http://127.0.0.1.1:7890"
 # os.environ["https_proxy"]="http://127.0.0.1:7890"
 
-
-title = """<h1 align="center">ChatCAD plus</h1>"""
-description = """**这是ChatCAD-plus的早期测试版本，欢迎任何反馈和贡献<br>-将胸片、牙片等图像上传至聊天框，即可获得ChatCAD-plus对该影像的分析<br>-可以继续与ChatCAD-plus交流，进一步了解可能的病症<br>-ChatCAD-plus会在必要的时候给出相关资料的链接**"""
+title = """<h1 align="center">ChatCAD Plus</h1>"""
+description = """**This is an early testing version of ChatCAD-plus. Feedback and contributions are welcome.<br>-Upload images such as chest X-rays or dental X-rays to the chat box to receive ChatCAD-plus's analysis of the image.<br>-You can continue to interact with ChatCAD-plus to further understand possible conditions.<br>-ChatCAD-plus will provide relevant resource links when necessary.**"""
 chatbot_bindings =  None
 chatbot = None
 
-def concat_history(message_history:list)->str:
-    ret=""
+def concat_history(message_history: list) -> str:
+    ret = ""
     for event in message_history:
-        ret+=f"{event['role']}: {event['content']}\n"
+        ret += f"{event['role']}: {event['content']}\n"
     return ret
 
 def chatcad(history, message_history):
     if chatbot_bindings is None:
-        response = '''**请先输入API key，然后点击保存。**'''
+        response = '''**Please enter the API key first, then click save.**'''
         history[-1][1] = response
         yield history
     else:
-        ref_record=concat_history(message_history)
+        ref_record = concat_history(message_history)
         user_message = history[-1][0]
-        # chat bot put here
+        # Chatbot interaction starts here
         # response = '''**That's cool!**'''
-        if isinstance(history[-1][0],str):
-            prompt=history[-1][0]
-            response = chatbot_bindings.chat(prompt,ref_record)
+        if isinstance(history[-1][0], str):
+            prompt = history[-1][0]
+            response = chatbot_bindings.chat(prompt, ref_record)
             message_history += [{"role": "user", "content": user_message}]
         else:
-            # response,modality = chatbot_bindings.report_zh(history[-1][0]['name'])
-            response,modality = chatbot_bindings.report_zh(history[-1][0][0])
-            message_history[-1]= {"role": "user", "content": f"用户上传了一张{modality}并请求诊断结果。"}
+            # response, modality = chatbot_bindings.report_zh(history[-1][0]['name'])
+            response, modality = chatbot_bindings.report_zh(history[-1][0][0])
+            message_history[-1] = {"role": "user", "content": f"The user uploaded a {modality} and requested a diagnostic result."}
 
         history[-1][1] = response
         message_history += [{"role": "assistant", "content": response}]
@@ -62,21 +61,21 @@ def add_file(history, file):
         cv2.imwrite("./imgs/temp/" + str(update_time) + ".jpg", temp_img)
         img_path = "./imgs/temp/" + str(update_time) + ".jpg"
         
-        
     history = history + [((img_path,), None)]
     return history
 
 def add_state(info, history, message_key, message_history):
     try:
         global chatbot_bindings
-        chatbot_bindings = gpt_bot(engine="gpt-3.5-turbo",api_key=info)
+        chatbot_bindings = gpt_bot(engine="gpt-3.5-turbo", api_key=info)
         chatbot_bindings.start()
         # chatbot_bindings = 1
-        response = '**初始化成功！**'
-    except:
+        response = '**Initialization successful!**'
+    except Exception as e:
         chatbot_bindings = None
-        response = '**初始化失败，请输入正确的openai key。**'
-        
+        response = '**Initialization failed. Please enter the correct OpenAI key.**'
+        print(f"Error during chatbot initialization: {e}")  # Log the error for debugging
+            
     message_key = [{"role": "api_key", "content": info}]
     message_history += [{"role": "system", "content": response}]
         
@@ -86,10 +85,8 @@ def add_state(info, history, message_key, message_history):
 def clean_data():
     return [{"role": "system", "content": description}], None, None
 
-
 def example_img(i, history):
     return i
-
 
 callback = gr.CSVLogger()
 
@@ -106,15 +103,15 @@ with gr.Blocks(css="""#col_container1 {margin-left: auto; margin-right: auto;}
         with gr.Column(scale=0.2):
             with gr.Row():
                 #top_p, temperature, top_k, repetition_penalty
-                with gr.Accordion("设置", open=True):
+                with gr.Accordion("Settings", open=True):
                     with gr.Row():
-                        api_key_input = gr.Textbox(placeholder="请输入API key", label="API key")
+                        api_key_input = gr.Textbox(placeholder="Please enter the API key.", label="API key")
                     with gr.Row():
-                        api_key_submit = gr.Button("保存")
+                        api_key_submit = gr.Button("Save")
             with gr.Row():
-                gr.Markdown("### 请上传您想要咨询的医学图像   若您没有图像，可以下载下方的示例图像")
+                gr.Markdown("### Please upload the medical images you wish to consult. If you don't have any images, you can download the sample images below.")
             with gr.Row():
-                upload_file = gr.UploadButton("📁上传图像", file_types=["file"], elem_id='upload_btn').style(size='lg')
+                upload_file = gr.UploadButton("📁 Upload Image", file_types=["file"], elem_id='upload_btn').style(size='lg')
             with gr.Row():
                 img_i = gr.Image(show_label=False, type="numpy", interactive=False)
                 gr.Examples(
@@ -125,23 +122,22 @@ with gr.Blocks(css="""#col_container1 {margin-left: auto; margin-right: auto;}
                     img_i,
                     img_i,
                     example_img,
-                    label="示例图像"
+                    label="Sample Images"
                 )
         with gr.Column(scale=0.8):
             with gr.Row():
                 with gr.Column(elem_id = "col_container1"):
-                    chatbot = gr.Chatbot(value=[(None, description)], label="ChatCAD plus", elem_id='chatbot').style(height=700) #c
+                    chatbot = gr.Chatbot(value=[(None, description)], label="ChatCAD Plus", elem_id='chatbot').style(height=700) #c
             with gr.Row():
                 with gr.Column(elem_id = "col_container2", scale=0.85):
-                    inputs = gr.Textbox(label="聊天框", placeholder="请输入文本或者上传图片") #t
+                    inputs = gr.Textbox(label="Chat Box", placeholder="Please enter text or upload an image.") #t
                 with gr.Column(elem_id = "col_container2", scale=0.15, min_width=0):
                     with gr.Row():
-                        inputs_submit = gr.Button("发送", elem_id='inputs_submit')
+                        inputs_submit = gr.Button("Send", elem_id='inputs_submit')
                     with gr.Row():
-                        clean_btn = gr.Button("清空", elem_id='clean_btn')
+                        clean_btn = gr.Button("Clear", elem_id='clean_btn')
                     
-                
-    
+        
     api_key_submit.click(add_state, [api_key_input, chatbot, user_key, user_history], [chatbot, user_key, user_history])
     
     inputs_submit.click(add_text, [chatbot, inputs], [chatbot, inputs]).then(
@@ -160,9 +156,6 @@ with gr.Blocks(css="""#col_container1 {margin-left: auto; margin-right: auto;}
     )
     
     # 127.0.0.1.1:7890
-    demo.queue().launch(server_port=4900, server_name="0.0.0.0", favicon_path="shtu.ico",share=True)
+    demo.queue().launch(server_port=4900, server_name="0.0.0.0", favicon_path="shtu.ico", share=True)
     # demo.queue().launch(server_port=4900, server_name="127.0.0.1", favicon_path="shtu.ico")
     # demo.queue().launch(server_port=4900, server_name="127.0.0.1", favicon_path="shtu.ico")
-
-    
-    
