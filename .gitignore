@@ -8,7 +8,7 @@ __pycache__/
 docbase/
 report_en_dict.json
 r2g/annotation.json
-weights/
+# weights/
 database.db
 # Distribution / packaging
 .Python

@@ -38,6 +38,8 @@ Install the requirements: pip install -r requirements.txt
 
 Install gradio-client: pip install gradio-client==0.2.4
 
+Add the weights and annotations from the Github to the ChatCAD repo
+
 
 
 """
