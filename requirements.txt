@@ -49,8 +49,6 @@ Install SentencePiece library: pip install sentencepiece
 
 Install sacremoses?: pip install sacremoses
 
-hello
-
 
 
 Downgrade httpx: pip install httpx==0.27.2
