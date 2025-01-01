@@ -55,4 +55,6 @@ Downgrade httpx: pip install httpx==0.27.2
 
 Replaced the proxy=1322342.42..... to proxy=https://1322342.42..... in chat_bot.py
 
+yes
+
 """
